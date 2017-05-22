@@ -1,0 +1,31 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.renderWhitespace": "all",
+  "editor.wordWrap": "on",
+  "editor.wordWrapColumn": 120,
+  "editor.minimap.enabled": true,
+  "extensions.autoUpdate": true,
+  "diffEditor.ignoreTrimWhitespace": true,
+  "javascript.validate.enable": false,
+  "files.trimTrailingWhitespace": true,
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 5000,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "jsconfig.json": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "scripts": true,
+    "build": true,
+    "static": true,
+    ".vscode": true
+  },
+  "eslint.autoFixOnSave": true,
+  "sortImports.suppressWarnings": false,
+  "sortImports.onSave": true,
+  "editor.formatOnSave": false
+}
