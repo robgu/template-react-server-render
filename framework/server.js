@@ -7,8 +7,7 @@ import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { ReduxRouter } from 'redux-router';
-import { reduxReactRouter } from 'redux-router/server';
-import { match } from 'redux-router/server';
+import { match, reduxReactRouter } from 'redux-router/server';
 import serialize from 'serialize-javascript';
 
 import * as connect from './connect';
@@ -19,10 +18,8 @@ import routes from './routes';
 class Server {
   constructor() {
     this._store = reduxReactRouter({ routes, createHistory })(createStore)(reducer);
-
     connect.init(this._store);
     i18n.init(this._store);
-    i18n.loadLang('zh-CN');
   }
 
   dispatch = (...args) => {
@@ -36,27 +33,31 @@ class Server {
       </Provider>
     );
 
-    const initialState = `window.__initialState = ${serialize(this._store.getState())};`;
     const template = fs.readFileSync('./index.html', 'utf-8');
-    return template
-      .replace('<div id="root"></div>', `<div id="root">${markup}</div>`)
-      .replace('window.__initialState = undefined;', initialState);
+    return template.replace('<div id="root"></div>', `<div id="root">${markup}</div>`);
   }
 }
 
-export default (req, res) => {
-  const query = qs.stringify(req.query);
-  const url = req.path + (query.length ? `?${query}` : '');
-  const server = new Server();
-  server.dispatch(match(url, (error, redirectLocation, routerState) => {
-    if (error) {
-      res.status(500).send(error.message);
-    } else if (redirectLocation) {
-      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-    } else if (!routerState) {
-      res.status(400).send('Not Found');
-    } else {
-      res.status(200).send(server._renderToString());
-    }
-  }));
+const initRoute = (server, url) => {
+  return new Promise((resolve, reject) => {
+    server.dispatch(match(url, (error, redirectLocation, routerState) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve([redirectLocation, routerState]);
+      }
+    }));
+  });
+};
+
+export default async (ctx, next) => {
+  try {
+    const url = ctx.url;
+    const server = new Server();
+    await i18n.loadLang('zh-CN');
+    await initRoute(server, url);
+    ctx.body = server._renderToString();
+  } catch (error) {
+    next(error);
+  }
 };

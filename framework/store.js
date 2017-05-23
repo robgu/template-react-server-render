@@ -1,4 +1,4 @@
-import createHistory from 'history/lib/createMemoryHistory';
+import createHistory from 'history/lib/createBrowserHistory';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { createLogger } from 'redux-logger';
 import { reduxReactRouter } from 'redux-router';
@@ -14,7 +14,7 @@ const finalCreateStore = compose(
   applyMiddleware(createLogger())
 )(createStore);
 
-const store = finalCreateStore(reducer, window.__initialState);
+const store = finalCreateStore(reducer);
 if (module.hot) {
   // Enable Webpack hot module replacement for reducers
   module.hot.accept('./reducer', () => {

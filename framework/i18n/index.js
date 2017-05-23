@@ -14,14 +14,15 @@ export const init = (_store) => {
   store = _store;
 };
 
-export const loadLang = (lang) => {
-  store.dispatch(pagan.loadLang(lang, () => {
+export const loadLang = async (lang) => {
+  await pagan.loadLang(lang, () => {
     return translations[lang];
-  }));
+  })(store.dispatch);
 };
 
 export const getLang = () => {
-  return pagan.getLang(i18nState, 'app');
+  const i18n = store.getState().i18n;
+  return pagan.getLang(i18n, 'app');
 };
 
 export const i18n = (...args) => {
