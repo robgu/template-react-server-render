@@ -1,11 +1,17 @@
-import React, { Component } from 'react';
+import connect from 'connect';
+import React, { Component, PropTypes } from 'react';
 
-export default class Page1 extends Component{
+@connect()
+export default class Page2 extends Component {
+  static propTypes = {
+    i18n: PropTypes.func.isRequired,
+  }
+
   render = () => {
     return (
       <div>
-        Page2
+        { this.props.i18n('page2') }
       </div>
-    )
+    );
   }
 }

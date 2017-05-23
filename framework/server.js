@@ -22,6 +22,7 @@ class Server {
 
     connect.init(this._store);
     i18n.init(this._store);
+    i18n.loadLang('zh-CN');
   }
 
   dispatch = (...args) => {
