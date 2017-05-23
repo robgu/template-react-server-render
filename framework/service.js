@@ -6,7 +6,7 @@ import server from './server';
 const app = express();
 app.use(logger('dev'));
 app.use('/static', express.static('static'));
-app.use(server.handleReq);
+app.use(server);
 
 module.exports = app.listen(8080, (err) => {
   if (err) {

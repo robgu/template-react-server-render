@@ -16,24 +16,7 @@ import * as i18n from './i18n';
 import reducer from './reducer';
 import routes from './routes';
 
-export default class Server {
-  static handleReq = (req, res) => {
-    const query = qs.stringify(req.query);
-    const url = req.path + (query.length ? `?${query}` : '');
-    const server = new Server();
-    server.dispatch(match(url, (error, redirectLocation, routerState) => {
-      if (error) {
-        res.status(500).send(error.message);
-      } else if (redirectLocation) {
-        res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-      } else if (!routerState) {
-        res.status(400).send('Not Found');
-      } else {
-        res.status(200).send(server._renderToString());
-      }
-    }));
-  }
-
+class Server {
   constructor() {
     this._store = reduxReactRouter({ routes, createHistory })(createStore)(reducer);
 
@@ -59,3 +42,20 @@ export default class Server {
       .replace('window.__initialState = undefined;', initialState);
   }
 }
+
+export default (req, res) => {
+  const query = qs.stringify(req.query);
+  const url = req.path + (query.length ? `?${query}` : '');
+  const server = new Server();
+  server.dispatch(match(url, (error, redirectLocation, routerState) => {
+    if (error) {
+      res.status(500).send(error.message);
+    } else if (redirectLocation) {
+      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+    } else if (!routerState) {
+      res.status(400).send('Not Found');
+    } else {
+      res.status(200).send(server._renderToString());
+    }
+  }));
+};
