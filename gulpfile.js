@@ -37,5 +37,5 @@ gulp.task('dist', () => {
 gulp.task('server', () => {
   return gulp.src('./framework/server.js')
     .pipe(webpackStream(webConfig.server, webpack))
-    .pipe(gulp.dest('build/server'));
+    .pipe(gulp.dest('build'));
 });

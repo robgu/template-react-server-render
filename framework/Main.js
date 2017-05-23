@@ -9,14 +9,14 @@ import store from './store';
 export default class Main extends Component {
   constructor(props) {
     super(props);
-    loadLang(this.props.lang || 'zh-CN');
+    loadLang('zh-CN');
   }
 
   render = () => {
     return (
-      <Provider store={this.props.store || store}>
+      <Provider store={store}>
         <ReduxRouter>
-          {this.props.routes || routes}
+          {routes}
         </ReduxRouter>
       </Provider>
     );

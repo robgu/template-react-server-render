@@ -1,10 +1,13 @@
 {
-  "name": "website",
+  "name": "react-server-render",
   "version": "1.0.0",
   "description": "利用 express 实现 react + redux 的 server render",
   "scripts": {
-    "start": "cd build && node -r babel-register service.js",
-    "build": "gulp dist && gulp server"
+    "start": "cd build && node service.js",
+    "build": "gulp dist && gulp server && npm run build-service",
+    "build-client": "gulp dist",
+    "build-server": "gulp server",
+    "build-service": "babel ./framework/service.js -o ./build/service.js"
   },
   "engines": {
     "node": "6.9.1",
@@ -29,6 +32,7 @@
   "dependencies": {
     "autoprefixer": "6.7.7",
     "babel-core": "6.24.0",
+    "babel-cli": "6.24.1",
     "babel-eslint": "7.2.1",
     "babel-loader": "6.4.1",
     "babel-plugin-import": "1.1.1",

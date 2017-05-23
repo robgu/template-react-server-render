@@ -26,11 +26,11 @@ const prodConfig = {
   // https://github.com/webpack/extract-text-webpack-plugin/issues/35
   stats: { children: false },
   entry: {
-    app: './framework/client.js',
+    client: './framework/client.js',
   },
   output: {
     publicPath: '/',
-    filename: 'static/bundle.min.js',
+    filename: 'static/[name].min.js?[chunkhash]',
     chunkFilename: '[chunkhash].js',
   },
   module: {
@@ -82,7 +82,7 @@ const prodConfig = {
         warnings: false,
       },
     }),
-    new ExtractTextPlugin('static/app.min.css'),
+    new ExtractTextPlugin('static/[name].min.css?[chunkhash]'),
     new HtmlWebpackPlugin({
       title: 'React Server Render Demo',
       template: 'framework/template.html',
@@ -90,10 +90,6 @@ const prodConfig = {
       hash: true,
     }),
     new CopyWebpackPlugin([{ from: 'static', to: 'static' }]),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendors',
-      filename: 'static/vendors.min.js?[chunkhash]',
-    }),
     // Exit with non-zero code when there are any errors
     function () {
       this.plugin('done', function (stats) { // eslint-disable-line
@@ -116,7 +112,7 @@ const serverConfig = {
   // https://github.com/webpack/extract-text-webpack-plugin/issues/35
   stats: { children: false },
   entry: {
-    index: './framework/server.js',
+    server: './framework/server.js',
   },
   output: {
     publicPath: '/',
@@ -137,8 +133,7 @@ const serverConfig = {
     }],
   },
   plugins: [
-    new CleanWebpackPlugin(['build/server']),
-    new CopyWebpackPlugin([{ from: 'framework/service.js', to: '../service.js' }]),
+    new CleanWebpackPlugin(['build/server.js', 'build/server.js.map']),
     new WebpackAddModuleExports(),
     // Exit with non-zero code when there are any errors
     function () {
