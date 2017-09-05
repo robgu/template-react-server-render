@@ -1,10 +1,7 @@
-import 'babel-polyfill';
-
 import React from 'react';
 import { render } from 'react-dom';
 
 render(
-  React.createElement(require('./Main').default),
+  <span>hello world!!</span>,
   document.getElementById('root')
 );
-
